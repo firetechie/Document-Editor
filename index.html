@@ -1,136 +1,62 @@
-<!DOCTYPE html>
-<html lang="en" >
+<html>
 <head>
- <meta charset="UTF-8">
- <title>Text Editor</title>
- <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.9.0/css/all.css"
-integrity="sha384-vlOMx0hKjUCl4WzuhIhSNZSm2yQCaf0mOU1hEDK/iztH3gU4v5NMmJln9273A6Jz"
-crossorigin="anonymous">
-<style>
-*,
-*:before,
-*:after {
- box-sizing: border-box;
-}
-.tool-list {
- display: flex;
- flex-flow: row nowrap;
- list-style: none;
- padding: 0;
- margin: 1rem;
- overflow: hidden;
- border-raduis: 10px;
-}
-.tool--btn {
- display: block;
- border: none;
- padding: 0.5rem;
- font-size: 20px;
-}
-#output {
- height: 400px;
- box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
- margin: 1rem;
- padding: 1rem;
-}
-</style>
- <script>
- window.console = window.console || function(t) {};
-</script>
+	<style>
+		.editor
+        {
+			border:solid 1px #ccc;
+			padding: 20px;
+			min-height:200px;
+        }
 
+        .sample-toolbar
+        {
+			border:solid 1px #ddd;
+			background:#f4f4f4;
+			padding: 5px;
+			border-radius:3px;
+        }
 
- <script>
- if (document.location.search.match(/type=embed/gi)) {
- window.parent.postMessage("resize", "*");
- }
-</script>
+        .sample-toolbar > span
+        {
+			cursor:pointer;
+		}
+
+        .sample-toolbar > span:hover
+        {
+			text-decoration:underline;
+		}
+	</style>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 </head>
-<body translate="no" >
- <div class="toolbar">
-<ul class="tool-list">
-<li class="tool">
-<button
-type="button"
-data-command='justifyLeft'
-class="tool--btn">
-<i class=' fas fa-align-left'></i>
-</button>
-</li>
-<li class="tool">
-<button
-type="button"
-data-command='justifyCenter'
-class="tool--btn">
-<i class=' fas fa-align-center'></i>
-</button>
-</li>
-<li class="tool">
-<button
-type="button"
-data-command="bold"
-class="tool--btn">
-<i class=' fas fa-bold'></i>
-</button>
-</li>
-<li class="tool">
-<button 
-type="button"
-data-command="italic"
-class="tool--btn">
-<i class=' fas fa-italic'></i>
-</button>
-</li>
-<li class="tool">
-<button
-type="button"
-data-command="underline"
-class="tool--btn">
-<i class=' fas fa-underline'></i>
-</button>
-</li>
-<li class="tool">
-<button
-type="button"
-data-command="insertOrderedList"
-class="tool--btn">
-<i class=' fas fa-list-ol'></i>
-</button>
-</li>
-<li class="tool">
-<button
-type="button"
-data-command="insertUnorderedList"
-class="tool--btn">
-<i class=' fas fa-list-ul'></i>
-</button>
-</li>
-<li class="tool">
-<button
-type="button"
-data-command="createlink"
-class="tool--btn">
-<i class=' fas fa-link'></i>
-</button>
-</li>
-</ul>
-</div>
-<div id="output" contenteditable="true"></div>
- <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js"></script>
 
- <script id="rendered-js" >
-let output = document.getElementById('output');
-let buttons = document.getElementsByClassName('tool--btn');
-for (let btn of buttons) {
- btn.addEventListener('click', () => {
- let cmd = btn.dataset['command'];
- if (cmd === 'createlink') {
- let url = prompt("Enter the link here: ", "http:\/\/");
- document.execCommand(cmd, false, url);
- } else {
- document.execCommand(cmd, false, null);
- }
- });
-}
- </script>
+<body>
+	<div class="sample-toolbar">
+		<a href="javascript:void(0)" onclick="format('bold')"><span class="fa fa-bold fa-fw"></span></a>
+		<a href="javascript:void(0)" onclick="format('italic')"><span class="fa fa-italic fa-fw"></span></a>
+		<a href="javascript:void(0)" onclick="format('insertunorderedlist')"><span class="fa fa-list fa-fw"></span></a>
+		<a href="javascript:void(0)" onclick="setUrl()"><span class="fa fa-link fa-fw"></span></a>
+		<span><input id="txtFormatUrl" placeholder="url" class="form-control"></span>
+</div>
+
+<div class="editor" id="sampleeditor">
+	</div>
+
+	<script>
+		window.addEventListener('load', function(){
+			document.getElementById('sampleeditor').setAttribute('contenteditable', 'true');
+			document.getElementById('sampleeditor2').setAttribute('contenteditable', 'true');
+        });
+
+		function format(command, value) {
+			document.execCommand(command, false, value);
+		}
+
+		function setUrl() {
+			var url = document.getElementById('txtFormatUrl').value;
+			var sText = document.getSelection();
+			document.execCommand('insertHTML', false, '<a href="' + url + '" target="_blank">' + sText + '</a>');
+			document.getElementById('txtFormatUrl').value = '';
+		}
+	</script>
 </body>
 </html>
